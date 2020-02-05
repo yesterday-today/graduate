@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "交通",
+  "usingComponents":{
+    "van-tab": "/static/vant/tab/index",
+    "van-tabs": "/static/vant/tabs/index",
+    "van-icon":"/static/vant/icon/index"
+  }
+}

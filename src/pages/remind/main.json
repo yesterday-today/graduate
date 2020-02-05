@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "上车提醒",
+  "usingComponents":{
+    "van-switch": "/static/vant/switch/index"
+  }
+}

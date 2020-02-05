@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "租房",
+  "usingComponents":{
+    "van-overlay": "/static/vant/overlay/index"
+  }
+}

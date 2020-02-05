@@ -1,0 +1,95 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/search/main",
+    "pages/line/main",
+    "pages/busLocation/main",
+    "pages/map/main",
+    "pages/remind/main",
+    "pages/addRemind/main",
+    "pages/logs/main",
+    "pages/house/main",
+    "pages/houseDetail/main",
+    "pages/counter/main",
+    "pages/my/main",
+    "pages/set/main",
+    "pages/aboutIt/main",
+    "pages/food/main",
+    "pages/menu/main",
+    "pages/menuSort/main",
+    "pages/menuDetail/main",
+    "pages/menuCollect/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "plugins":{
+    "mapPlugin":{
+        "version":"1.0.5",
+        "provider":"wx50b5593e81dd937a"
+    }
+  },
+  "permission":{
+        "scope.userLocation": {
+          "desc": "你的位置信息将用于小程序定位"
+        }
+  },
+  "tabBar": {
+    "color": "#075fe4",
+    "backgroundColor": "#fafafa",
+    "selectedColor": "#ec3e30",
+    "borderStyle": "white",
+
+    "list": [{
+      "text": "交通",
+      "pagePath": "pages/index/main",
+      "iconPath": "static/tabs/traffic.png",
+      "selectedIconPath": "static/tabs/traffic1.png"
+    }, {
+      "text": "租房",
+      "pagePath": "pages/house/main",
+      "iconPath": "static/tabs/house.png",
+      "selectedIconPath": "static/tabs/house1.png"
+    },
+    {
+      "text": "美食",
+      "pagePath": "pages/food/main",
+      "iconPath": "static/tabs/food.png",
+      "selectedIconPath": "static/tabs/food1.png"
+    },
+    {
+      "text": "我的",
+      "pagePath": "pages/my/main",
+      "iconPath": "static/tabs/my.png",
+      "selectedIconPath": "static/tabs/my1.png"
+    }],
+
+    "items": [{
+      "name": "首页",
+      "pagePath": "pages/index/main",
+      "icon": "static/tabs/home.png",
+      "activeIcon": "static/tabs/home-active.png"
+    }, {
+      "name": "租房",
+      "pagePath": "pages/logs/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    },
+    {
+      "name": "美食",
+      "pagePath": "pages/food/main",
+      "icon": "static/tabs/orders.png",
+      "activeIcon": "static/tabs/orders-active.png"
+    },
+    {
+      "name": "我的",
+      "pagePath": "pages/my/main",
+      "icon": "static/tabs/my.png",
+      "activeIcon": "static/tabs/my1.png"
+    }],
+    "position": "bottom"
+  }
+}

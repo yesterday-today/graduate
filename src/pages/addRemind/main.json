@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "上车提醒设置",
+  "usingComponents":{
+    "van-cell": "/static/vant/cell/index",
+    "van-action-sheet": "/static/vant/action-sheet/index",
+    "van-switch": "/static/vant/switch/index"
+  }
+}

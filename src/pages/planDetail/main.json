@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "计划单详情页",
+  "usingComponents":{
+    "van-datetime-picker": "/static/vant/datetime-picker/index"
+  }
+}

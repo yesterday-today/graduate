@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "菜谱收藏",
+  "navigationBarBackgroundColor":"#d3e9f9",
+  "usingComponents":{
+    "van-loading":"/static/vant/loading/index"
+  }
+}
