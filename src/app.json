@@ -10,6 +10,7 @@
     "pages/logs/main",
     "pages/house/main",
     "pages/houseDetail/main",
+    "pages/houseCollect/main",
     "pages/counter/main",
     "pages/my/main",
     "pages/set/main",

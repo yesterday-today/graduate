@@ -142,7 +142,7 @@ export default {
                 data:this.detail,
             },
             success:res=>{
-                console.log(res.data);
+                console.log(res);
             }
         });
     },
@@ -170,9 +170,6 @@ export default {
     this.dataType=options.type;
     this.collectId=options.id;
     this.urlName=options.url;
-    console.log(this.dataType)
-    console.log(this.id)
-    console.log(this.urlName)
   },
 }
 </script>

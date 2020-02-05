@@ -98,44 +98,84 @@ export default {
     };
   },
   methods: {
-      get(){
-          wx.request({
-            //   url:'http://localhost:8888/house',//本地服务器地址
-              url:'http://192.168.1.6:8888/house/id='+this.id,//本地服务器地址
-              success:res=>{
-                  if(res.statusCode==200){
-                      this.data=res.data[0];
-                      this.title=this.data.title;
-                      var price=this.data.price+'元';
-                      var type=this.data.type;
-                      var size=this.data.size;
-                      this.tabBottom.push(price,type,size);
-                      this.imgUrls=this.data.imgList;
-                      this.basicList=this.data.detail[0].news;
-                      this.link=this.data.detail[0].link;
-                      this.facilities=this.data.detail[0].facilities;
-                      this.address=this.data.area+'区'+this.data.address;
-                      console.log(this.address)
-                  }
-              }
-          })
+    get(){
+        wx.request({
+        //   url:'http://localhost:8888/house',//本地服务器地址
+            url:'http://192.168.1.6:8888/house/id='+this.id,//本地服务器地址
+            success:res=>{
+                if(res.statusCode==200){
+                    this.data=res.data[0];
+                    this.title=this.data.title;
+                    var price=this.data.price+'元';
+                    var type=this.data.type;
+                    var size=this.data.size;
+                    this.tabBottom.push(price,type,size);
+                    this.imgUrls=this.data.imgList;
+                    this.basicList=this.data.detail[0].news;
+                    this.link=this.data.detail[0].link;
+                    this.facilities=this.data.detail[0].facilities;
+                    this.address=this.data.area+'区'+this.data.address;
+                }
+            }
+        })
       },
-      gomap(address){
+    //判断是否收藏了
+    collectBol(){
+        console.log(this.id)
+        const db = wx.cloud.database({env: 'ybb-901hf'});
+        db.collection('houseCollect').where({
+            _id:parseInt(this.id)
+        }).get({
+            success:res=>{
+                if(res.data.length!=0){
+                    this.collect=true;
+                }else{
+                    this.collect=false;
+                }
+            }
+        })
+    },
+    //添加数据到数据库
+    addCollect(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('houseCollect').add({
+            data:{
+                _id:this.data.id,
+                data:this.data,
+            },
+            success:res=>{
+                console.log(res);
+            }
+        });
+    },
+    //移除数据
+    removeCollect(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection("houseCollect").doc(parseInt(this.id)).remove({
+            success:res=>{
+                console.log(res)
+            },
+            fail:res=>{
+                console.log(res);
+            }
+        })
+    },
+    gomap(address){
         mpvue.navigateTo({url:'../map/main?address='+address})
-      },
-      change(){
+    },
+    change(){
         if(this.collect==false){
             this.collect=true;
-            // this.addCollect();
-      }else{
+            this.addCollect();
+    }else{
         this.collect=false;
-            console.log('删除')
-            // this.removeCollect();
-      }
-      }
+        this.removeCollect();
+        }
+    }
   },
   mounted() {
     this.get();
+    this.collectBol();
   },
   onLoad(options){
     Object.assign(this.$data, this.$options.data());//加载页面时，重置数据

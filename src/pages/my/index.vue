@@ -71,6 +71,8 @@ export default {
         mpvue.navigateTo({url:'../plan/main'})
       }else if(index==3){
         mpvue.navigateTo({url:'../menuCollect/main'})
+      }else if(index==2){
+        mpvue.navigateTo({url:'../houseCollect/main'})
       }
     },
     //去设置页面
