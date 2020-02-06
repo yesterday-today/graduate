@@ -7,7 +7,6 @@
     "pages/map/main",
     "pages/remind/main",
     "pages/addRemind/main",
-    "pages/logs/main",
     "pages/house/main",
     "pages/houseDetail/main",
     "pages/houseCollect/main",

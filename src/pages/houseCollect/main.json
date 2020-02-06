@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "菜谱收藏",
+  "navigationBarTitleText": "房源收藏",
   "navigationBarBackgroundColor":"#d3e9f9",
   "usingComponents":{
     "van-loading":"/static/vant/loading/index"
