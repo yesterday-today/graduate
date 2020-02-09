@@ -25,8 +25,8 @@ export default {
     data(){
         return{
             data:[],//获取区
-            area:'思明',//获取区
-            detail:'前埔',//获取详细地址
+            // area:'思明',//获取区
+            // detail:'不限',//获取详细地址
             district:[],//获取详细地址
             selectText:'',
             leftindex:0,

@@ -13,13 +13,16 @@ export default {
      menuList:'',
      index:'',
      id:'',
+     openid:'',//获取openid
     }
   },
   methods:{
     // 连接数据库
     ajx(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection('foodCollect').get({
+        db.collection('foodCollect').where({
+            _openid:this.globalData.openid
+        }).get({
             success:res=>{
                 this.menuList=res.data;
             }
@@ -40,6 +43,10 @@ export default {
   },
   mounted(){
       this.ajx();
+  },
+  onLoad(options){
+    Object.assign(this.$data, this.$options.data());//加载页面时，重置数据
+    this.openid=options.openid;
   }
 }
 </script>

@@ -13,16 +13,18 @@ export default {
      houseData:[],
      index:'',
      id:'',
+     openid:''
     }
   },
   methods:{
     // 连接数据库
     ajx(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection('houseCollect').get({
+        db.collection('houseCollect').where({
+            _openid:this.globalData.openid
+        }).get({
             success:res=>{
                 this.houseData=res.data;
-                console.log(this.houseData)
             }
         });
     },
@@ -32,6 +34,8 @@ export default {
   },
   mounted(){
       this.ajx();
+  },
+  onLoad(options){
   }
 }
 </script>

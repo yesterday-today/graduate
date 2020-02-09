@@ -26,6 +26,27 @@ export default {
   },
   log () {
     console.log(`log at:${Date.now()}`)
+  },
+  onLaunch(){
+      if(!wx.cloud){
+        console.log('请使用2.2.3或以上的基础库以使用云能力')
+      }else{
+        wx.cloud.init({
+          traceUser:true
+        })
+        //获取openid
+        wx.cloud.callFunction({
+            name:'login',
+            data:{},
+            success:res=>{
+                this.globalData.openid=res.result.openid
+            },
+            fail:err=>{
+                console.log('[云函数] [login] 调用失败', err)
+            }
+        })
+      }
+
   }
 }
 </script>

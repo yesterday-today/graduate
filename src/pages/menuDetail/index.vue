@@ -78,31 +78,39 @@ export default {
     }
   },
   methods:{
+    getData(){
+        this.img=this.detail.menu[0];
+        this.title=this.detail.title;
+        this.contentList=this.detail.contentList[0];
+        this.mainList=this.detail.mainList;
+        this.flList=this.detail.flList;
+        this.methodsList=this.detail.methodList;
+        this.skill=this.detail.skill;
+    },
     ajax(){
         this.loadValue=true;
-        wx.cloud.callFunction({
-            name: this.dataType,
-            success: res=>{
-                console.log(res)
-                if(this.urlName=='pages/menuCollect/main'){
-                    console.log(22)
-                    this.detail=res.result.data[this.id].data;
-                    console.log(this.detail)
+        if(this.urlName=='pages/menuCollect/main'){
+            const db = wx.cloud.database({env: 'ybb-901hf'})
+            db.collection(this.dataType).where({
+                _openid:this.globalData.openid
+             }).get({
+                success:res=>{
+                    this.detail=res.data[this.id].data;
+                    this.getData();
+                    this.loadValue=false;
                 }
-                else{
+            })
+        }
+        else{
+            wx.cloud.callFunction({
+                name: this.dataType,
+                success:res=>{
                     this.detail=res.result.data[this.id];
-                    console.log(this.detail)
+                    this.getData();
+                    this.loadValue=false;
                 }
-                this.img=this.detail.menu[0];
-                this.title=this.detail.title;
-                this.contentList=this.detail.contentList[0];
-                this.mainList=this.detail.mainList;
-                this.flList=this.detail.flList;
-                this.methodsList=this.detail.methodList;
-                this.skill=this.detail.skill;
-                this.loadValue=false;
-            }
-        })
+            })
+        }
     },
     //判断是否收藏了
     collectBol(){
@@ -126,7 +134,6 @@ export default {
         this.addCollect();
       }else{
         this.collect=false;
-        console.log('删除')
         this.removeCollect();
       }
     },
@@ -142,7 +149,6 @@ export default {
                 data:this.detail,
             },
             success:res=>{
-                console.log(res);
             }
         });
     },
@@ -151,10 +157,10 @@ export default {
         const db = wx.cloud.database({env: 'ybb-901hf'})
         db.collection("foodCollect").doc(this.detail._id).remove({
             success:res=>{
-                console.log(res)
+                // console.log(res)
             },
             fail:res=>{
-                console.log(res);
+                // console.log(res);
             }
         })
     }

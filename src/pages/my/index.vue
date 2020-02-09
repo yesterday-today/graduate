@@ -126,7 +126,6 @@ export default {
           if (res.authSetting['scope.userInfo']) {
             wx.getUserInfo({
               success: res=> {
-                  console.log(res)
                 this.userInfo=res.userInfo;
                 this.warnBol=false;
                 //用户已经授权过
@@ -142,13 +141,6 @@ export default {
     }
   },
   mounted(){
-    wx.login({
-        success:res=>{
-            console.log(res)
-            if(res.code){
-            }
-        }
-    })
     this.getSetting()
   },
   onLoad(){

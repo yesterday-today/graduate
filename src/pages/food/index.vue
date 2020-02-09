@@ -111,11 +111,9 @@ export default {
   methods:{
     goLocation(){
         this.popBol=true;
-        console.log(this.popBol)
     },
     popupCancel(){
         this.popBol=false;
-        console.log(this.popBol)
     },
     popupConfirm(){
 
@@ -125,7 +123,6 @@ export default {
             name: 'food',
             complete: res=>{
                 this.menuList=res.result.data;
-                console.log('云函数返回数据:',res);
             }
         })
     },

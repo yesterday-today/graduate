@@ -6,7 +6,10 @@ App.mpType = 'app'
 
 const app = new Vue(App)
 app.$mount()
+//设置全局变量
+Vue.prototype.globalData = getApp().globalData
 
 wx.cloud.init({
     traceUser: true
 })
+
