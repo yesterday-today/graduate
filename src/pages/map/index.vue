@@ -82,7 +82,6 @@ export default {
             from:this.formLocation,
             to:this.toLocation,
             success:res=>{
-                console.log(mode)
                 if(res.status==0){
                     this.routes=res.result.routes;
                     this.lineDetail=res.result.routes[this.selectValue];
@@ -151,7 +150,6 @@ export default {
             },
             fail: function (error) {
                 this.message=error.message;
-                console.log(this.message)
             },
         })
     },

@@ -2,14 +2,14 @@
   <div class="index">
       <div class="wrap">
           <ul>
-            <li v-for="(item,index) in list" :key="index">
+            <li v-for="(item,index) in busCollect" :key="index" @click="goBus(index,item.data.lineNum)">
                 <div class="left">
-                    <p class="on">{{item.on}}</p>
-                    <p class="name">{{item.bus}}路</p>
-                    <p class="off">{{item.off}}</p>
+                    <p class="on">{{item.data.geton}}</p>
+                    <p class="name">{{item.data.lineNum}}路</p>
+                    <p class="off">{{item.data.getoff}}</p>
                 </div>
                 <div class="right">
-                    <p class="num">4站</p>
+                    <p class="num">{{item.data.stationNum}}站</p>
                     <p class="time">4分 / 1.5公里</p>
                 </div>
             </li>
@@ -20,12 +20,19 @@
 
 <script>
 export default {
+  props:['busCollect'],
   data () {
       return{
        list:[{on:'瑞景商业广场',bus:28,off:'滨南中山医院'},{on:'瑞景商业广场',bus:28,off:'滨南中山医院'}]
       }
   },
   methods: {
+      //跳转到公交详情页
+      goBus(id,num){
+          this.$emit('goBus',id,num);
+
+      }
+
   },
 }
 </script>

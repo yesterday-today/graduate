@@ -2,17 +2,14 @@
   <div class="index">
       <div class="wrap">
           <ul>
-            <li v-for="(item,index) in list" :key="index">
+            <li v-for="(item,index) in data" :key="index" @click="goBusLocation(item.lineName)">
                 <div class="img">
-                    <!-- <img src="" alt=""> -->
+                    <i class="iconfont icon-gongjiao"></i>
                 </div>
-                <p>{{item.bus}}路</p>
-                <div class="img">
-                    <!-- <img src="" alt=""> -->
-                </div>
+                <p>{{item.lineName}}路</p>
             </li>
          </ul>
-         <div class="bot" @click="clear">
+         <div class="bot" @click="clear" v-if="data.length!=0">
             <p>清空搜索历史</p>
          </div>
       </div>
@@ -21,14 +18,18 @@
 
 <script>
 export default {
+  props:['data'],
   data () {
       return{
-       list:[{bus:28},{bus:127}]
       }
   },
   methods: {
       clear(){
-
+          this.$emit('clear');
+      },
+      //跳转到公交详情页
+      goBusLocation(name){
+          this.$emit('goBusLocation',name);
       }
   },
 }
@@ -50,12 +51,14 @@ export default {
                 .img{
                     width:60rpx;
                     height:60rpx;
+                    line-height: 60rpx;
+                    text-align: center;
                     padding:20rpx;
                     // float: left;
-                    img{
+                    i{
                         width:100%;
                         height:100%;
-                        display: block;
+                        color: blue;
                     }
                 }
                 p{

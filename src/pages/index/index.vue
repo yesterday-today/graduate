@@ -2,8 +2,9 @@
   <div class="index">
       <div class="index-top">
           <div class="index-top-left">
-              <p>厦门</p>
-              <i class="iconfont icon-xiala"></i>
+            <van-dropdown-menu>
+              <van-dropdown-item :value="value1" :options="option1" @change="change"/>
+            </van-dropdown-menu>
           </div>
           <div class="index-top-right" @click="goSearch">
             <i class="iconfont icon-sousuo"></i>
@@ -26,7 +27,7 @@
         <div class="index-tab">
             <van-tabs @click="onClick">
                 <van-tab title="收藏">
-                    <collect></collect>
+                    <collect :busCollect="busCollect" @goBus="goBus"></collect>
                 </van-tab>
                 <van-tab title="历史路线">
                     <history></history>
@@ -47,23 +48,41 @@ export default {
   data () {
       return{
         locationBol:false,
+        cityId:82,//城市id
         selectIndex:0,
+        busCollect:[],
         bannerList:[{
             text:'路线',
         },
         {
             text:'上车提醒',
         }],
-        tabList:['收藏','历史路线']
+        tabList:['收藏','历史路线'],
+        option1: [
+            { text: '厦门', value: 82 },
+            { text: '漳州', value: 162 },
+            { text: '泉州', value: 103 }
+        ],
+        value1:82,
       }
   },
   methods: {
+    // 连接数据库
+    ajx(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('busCollect').where({
+            _openid:this.globalData.openid
+        }).get({
+            success:res=>{
+                this.busCollect=res.data;
+            }
+        });
+    },
     onClick(event){
 
     },
     popupCancel(){
           this.locationBol=false;
-          console.log(this.popBol)
       },
     popupConfirm(){
 
@@ -72,12 +91,25 @@ export default {
     goLine(index){
         this.selectIndex=index;
         console.log(this.selectIndex)
-        this.selectIndex==0?mpvue.navigateTo({url:'../line/main'}):mpvue.navigateTo({url:'../remind/main'});
+        this.selectIndex==0?mpvue.navigateTo({url:'../line/main'})
+        :mpvue.navigateTo({url:'../remind/main?cityId='+this.cityId});
     },
     goSearch(){
-        mpvue.navigateTo({url:'../search/main'})
+        mpvue.navigateTo({url:'../search/main?cityId='+this.value1});
+    },
+    //从收藏列表跳转到公交详情页
+    goBus(id,num){
+        console.log(num)
+        mpvue.navigateTo({url:'../busLocation/main?busLine='+num+'&cityId='+this.cityId})
+    },
+    //获取选择地区
+    change(e){
+        this.value1=e.mp.detail;
     }
-  },
+},
+    mounted(){
+        this.ajx()
+  }
 }
 </script>
 
@@ -86,26 +118,15 @@ export default {
     // width:90%;
     // margin:0 auto;
     &-top{
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
         height:60rpx;
         line-height:60rpx;
         padding:25rpx 0;
         &-left{
-            width:110rpx;
+            width:140rpx;
             overflow:hidden;
             float:left;
-            p{
-                font-size:30rpx;
-                float:left;
-            }
-            img{
-                float:right;
-                width:50rpx;
-                height:50rpx;
-                display:block;
-                padding:15rpx 0;
-            }
         }
         &-right{
             width:500rpx;

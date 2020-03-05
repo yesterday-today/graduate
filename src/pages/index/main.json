@@ -3,6 +3,8 @@
   "usingComponents":{
     "van-tab": "/static/vant/tab/index",
     "van-tabs": "/static/vant/tabs/index",
-    "van-icon":"/static/vant/icon/index"
+    "van-icon":"/static/vant/icon/index",
+    "van-dropdown-menu": "/static/vant/dropdown-menu/index",
+    "van-dropdown-item": "/static/vant/dropdown-item/index"
   }
 }

@@ -1,6 +1,10 @@
 {
   "navigationBarTitleText": "上车提醒",
   "usingComponents":{
-    "van-switch": "/static/vant/switch/index"
+    "van-switch": "/static/vant/switch/index",
+    "van-cell": "/static/vant/cell/index",
+    "van-cell-group": "/static/vant/cell-group/index",
+    "van-swipe-cell": "/static/vant/swipe-cell/index"
+
   }
 }

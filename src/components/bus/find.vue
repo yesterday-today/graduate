@@ -22,7 +22,6 @@ export default {
   },
   methods:{
       fx(){
-          console.log(111)
         this.getonFz=this.geton;
         this.geton=this.getoff;
         this.getoff=this.getonFz;

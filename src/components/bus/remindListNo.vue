@@ -4,7 +4,7 @@
           <div class="img">
               <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/clock2.png">
           </div>
-          <p class="detail">您还没有添加任何上车提醒</p>
+          <p class="detail">{{detail}}</p>
           <div class="button" @click="addClock"><p>立即添加</p></div>
       </div>
   </div>
@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  props:['detail'],
   data () {
       return{
       }

@@ -3,6 +3,8 @@
   "usingComponents":{
     "van-cell": "/static/vant/cell/index",
     "van-action-sheet": "/static/vant/action-sheet/index",
-    "van-switch": "/static/vant/switch/index"
+    "van-switch": "/static/vant/switch/index",
+    "van-datetime-picker":"/static/vant/datetime-picker/index",
+    "van-toast": "/static/vant/toast/index"
   }
 }

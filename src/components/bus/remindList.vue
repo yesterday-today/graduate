@@ -2,29 +2,37 @@
   <div class="index">
       <div class="wrap">
         <ul>
-          <li>
-              <div class="img">
-                  <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/clock1.png" alt="">
-              </div>
-              <div class="content">
-                  <div class="top-left">
-                      <p>18路</p>
+          <li v-for="(item,index) in data" :key="index">
+            <van-swipe-cell id="swipe-cell" :right-width="65" :disabled="disabled" class="van-swipe-cell" async-close @close="onClose(item._id)">
+              <van-cell-group>
+                <div @click="goAddRemind(item._id)">
+                  <div class="img">
+                    <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/clock1.png" alt="">
                   </div>
-                  <div class="cet-left">
-                      <p>体育学院东门</p>
+                  <div class="content">
+                    <div class="top-left">
+                        <p>{{item.data.busName}}路</p>
+                    </div>
+                    <div class="cet-left">
+                        <p v-if="name!=''">上车点:{{item.data.name.lineName}}站</p>
+                        <p v-else>提醒站名</p>
+                    </div>
+                    <div class="bot-left">
+                        <p>({{item.data.lineNum}}前提醒)</p>
+                    </div>
                   </div>
-                  <div class="bot-left">
-                      <p>下一站·西直北门</p>
-                  </div>
-              </div>
-              <div class="content1" v-if="url!='pages/addRemind/main'">
-                  <div class="time">
-                      <p>提醒 · 工作日</p>
-                  </div>
-                  <div class="switch">
-                    <van-switch :checked="checked" @change="onChange" size="50rpx" />
-                  </div>
-              </div>
+                </div>
+                <div class="content1" v-if="url!='pages/addRemind/main'">
+                    <div class="time">
+                        <p>提醒 · {{item.data.repeat}}</p>
+                    </div>
+                    <div class="switch">
+                        <van-switch :checked="checked" @change="onChange" size="50rpx" />
+                    </div>
+                </div>
+              </van-cell-group>
+              <view slot="right" class="van-swipe-cell__right" v-if="url!='pages/addRemind/main'">删除</view>
+            </van-swipe-cell>
           </li>
         </ul>
       </div>
@@ -33,9 +41,11 @@
 
 <script>
 export default {
+  props:['data'],
   data () {
       return{
         checked:true,
+        disabled:false,
         url:''
       }
   },
@@ -43,6 +53,12 @@ export default {
   methods: {
     onChange(){
         this.checked=!this.checked;
+    },
+    onClose(id){
+      this.$emit('clear',id);
+    },
+    goAddRemind(id){
+        this.$emit('goRemind',id);
     }
   },
   mounted(){
@@ -58,10 +74,24 @@ export default {
     .wrap{
         ul{
             border-top:3rpx solid #F2F2F2;
+            .van-swipe-cell{
+                background: #ff0000 !important;
+            }
             li{
                 width:100%;
                 height:200rpx;
+                background: #fff;
                 border-bottom:1rpx solid #F2F2F2;
+                .van-swipe-cell__right {
+                    display: inline-block;
+                    width: 155rpx;
+                    height: 200rpx;
+                    font-size:32rpx;
+                    line-height: 200rpx;
+                    color: #fff;
+                    text-align: center;
+                    background-color: #f44;
+                }
                 .img{
                     width:100rpx;
                     height:100rpx;
