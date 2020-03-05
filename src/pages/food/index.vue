@@ -24,8 +24,9 @@
         </div>
     </div>
     <location v-if="popBol"@popupConfirm="popupConfirm" @popupCancel="popupCancel"></location>
-    <foodReadys :food="foodList" v-if="tabindex!=5" @goMap="goMap"></foodReadys>
+    <foodReadys :food="foodList" :tab="tabindex" v-if="tabindex!=5" @goMap="goMap" @collect="collect"></foodReadys>
     <foodMenu :menuList="menuList" @go="go" v-if="tabindex==5"></foodMenu>
+    <van-toast id="van-toast"/>
   </div>
   
 </template>
@@ -36,12 +37,14 @@ import swipers from '@/components/swiper'
 import foodReadys from '@/components/food/foodReady'
 import foodMenu from '@/components/food/foodMenu'
 import location from '@/components/location'
+import Toast from '../../../static/vant/toast/toast';
 
 export default {
   components: {headerTop,swipers,foodReadys,foodMenu,location},
   data(){
     return{
       tabindex: 0,
+      type:0,//0为汉堡，1为面包,.....
       popBol:false,
       title: "汉堡",
       vals: ["智能排序","人气最高", "最便宜"],
@@ -81,34 +84,54 @@ export default {
           imgUrl: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/foodCp.png",
           title: "菜谱"
         }],
-        foodList: [
-        {
-          imgUrl: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/foodCp.png",
-          title: "华莱士",
-          address: "思明区中山路思明南路189号中华城CHINACITY南区5F",
-          price: 30,
-          comment:10,
-          grade:4.2,
-        },
-        {
-          imgUrl:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/foodCp.png",
-          title: "肯德基",
-          address: "思明区大学路129号之二（面对见福便利店右拐，有停车的巷子直走进来右手边)",
-          price: 50,
-          comment:100,
-          grade:4.2,
-        },
-        {
-          imgUrl:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/foodCp.png",
-          title: "肯德基",
-          address: "宝龙一城二楼出口处",
-          price: 10,
-          comment:1000,
-          grade:4.2,
-        }],
+        foodList:[]
     }
   },
   methods:{
+    //对接汉堡、面包、面食等接口
+    ajx(){
+        wx.request({
+          url:'http://localhost:8888/food/type='+this.tabindex,//本地服务器地址
+            // url:'http://192.168.1.4:8888/food/type='+this.tabindex,//本地服务器地址
+            data:{
+                city:'湖里',
+                district:'不限'
+            },
+            success:res=>{
+                this.foodList=res.data;
+                console.log(this.foodList)
+            }
+        })
+    },
+    //美食菜谱接口对接
+    ajax(){
+        wx.cloud.callFunction({
+            name: 'food',
+            complete: res=>{
+                this.menuList=res.result.data;
+            }
+        })
+    },
+    //添加美食数据到数据库
+    addCollect(id,data){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('foodCollect').add({
+            data:{
+                _id:parseInt(id),
+                data:data,
+            },
+            success:res=>{
+                Toast('收藏成功');
+            },
+            fail:res=>{
+                Toast('您已收藏过');
+            }
+        });
+    },
+    //点击美食菜单进行收藏
+    collect(id,data){
+        this.addCollect(id,data);
+    },
     goLocation(){
         this.popBol=true;
     },
@@ -118,29 +141,20 @@ export default {
     popupConfirm(){
 
     },
-    ajax(){
-        wx.cloud.callFunction({
-            name: 'food',
-            complete: res=>{
-                this.menuList=res.result.data;
-            }
-        })
-    },
     ontab(index) {
       this.tabindex = index;
       this.title = this.tabList[index].title;
+      this.tabindex!=5&&this.ajx();
     },
     //去详情页面
     go(index,id){
         this.index=index;
         this.id=id;
         mpvue.navigateTo({url:'../menuDetail/main?index='+this.index+'&id='+this.id+'&type='+'food'+'&url='+this.getPages()});
-        console.log(id);
     },
     //查看路线规划
     goMap(address){
         this.address=address;
-        console.log(this.address)
         mpvue.navigateTo({url:'../map/main?address='+this.address})
     },
     //更多菜谱
@@ -168,6 +182,7 @@ export default {
     }
   },
   mounted(){
+      this.ajx();
       this.ajax();
   },
 }

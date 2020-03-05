@@ -53,7 +53,7 @@
 <script>
 import foodMaterial from '@/components/food/foodMaterial'
 import foodMethod from '@/components/food/foodMethod'
-import { nextTick } from '../../../dist/wx/static/vant/common/utils';
+// import { nextTick } from '../../../dist/wx/static/vant/common/utils';
 
 export default {
   components:{foodMaterial,foodMethod},
@@ -116,7 +116,7 @@ export default {
     collectBol(){
         const db = wx.cloud.database({env: 'ybb-901hf'});
         this.loadValue=true;
-        db.collection('foodCollect').where({
+        db.collection('menuCollect').where({
             _id:this.collectId
         }).get({
             success: res=>{
@@ -143,7 +143,7 @@ export default {
     //添加数据到数据库
     addCollect(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection('foodCollect').add({
+        db.collection('menuCollect').add({
             data:{
                 _id:this.detail._id,
                 data:this.detail,
@@ -155,7 +155,7 @@ export default {
     //移除数据
     removeCollect(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection("foodCollect").doc(this.detail._id).remove({
+        db.collection("menuCollect").doc(this.detail._id).remove({
             success:res=>{
                 // console.log(res)
             },

@@ -19,9 +19,9 @@
     </div>
     <div class="loadingNo" v-if="loadingNo==true">
         <div class="icon">
-            <van-icon name="warn-o" />
+            <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/tanger.png" alt=""/>
         </div>
-        <p>暂无您想要搜索的内容</p>
+        <p>很抱歉，暂无您想要搜索的内容</p>
     </div>
   </div>
 </template>
@@ -35,13 +35,16 @@ export default {
       id:0,
       index:'',
       menuList:[],
-      loadValue:false,
-      loadingNo:false,
+      loadValue:false,//加载
+      loadingNo:false,//没有数据时进行相应提示
       operateValue:1,//输入时为1，搜索为2
       form:0,//0为实用分类，1为每日三餐，2为家常菜谱....
       type:0,//0为早餐，2为午餐，3为下午茶....
       val:'',
-      dataBank:[['','','','vegetarian'],['breakfast','lunch']],
+      dataBank:[['quick','goRice','cold','vegetarian','meat','soup','daily'],
+            ['breakfast','lunch','supper','tea','snack'],['hot','cold','vegetarian'],
+            ['southern','lslamic','sichuan','xiangcai'],['','','','',''],
+            ['','','','',''],['','','','']],
       dataValue:'',
     }
   },
@@ -90,12 +93,18 @@ export default {
                 }else{
                     this.loadingNo=false;
                 }
-            }
+            },
         })
     },
     ajax(){
         this.loadValue=true;
-        wx.cloud.callFunction({
+        console.log('dataValue:'+this.dataValue)
+        if(this.dataValue==''){
+            console.log(444)
+            this.loadValue=false;
+            this.loadingNo=true;
+        }
+        this.dataValue!=''&&wx.cloud.callFunction({
             name: this.dataValue,
             complete: res=>{
                 // setTimeout(()=>{
@@ -103,7 +112,8 @@ export default {
                     this.loadValue=false;
                 // },800)
                 console.log('云函数返回数据:',res);
-            }
+            },
+
         })
     },
   },
@@ -115,7 +125,6 @@ export default {
     Object.assign(this.$data, this.$options.data());//加载页面时，重置数据
     this.form=options.form;
     this.type=options.type;
-    console.log(options)
   },
 }
 </script>
@@ -129,12 +138,15 @@ export default {
     }
     .loadingNo{
         display: flex;
-        width: 60%;
+        width: 70%;
         margin: 0 auto;
         height:200rpx;
         line-height: 200rpx;
-        .icon{
-            color:red;
+        img{
+            width: 50rpx;
+            height: 50rpx;
+            display: block;
+            padding: 75rpx 0;
         }
         p{
             font-size:32rpx;

@@ -1,13 +1,13 @@
 <template>
   <div class="menu">
-    <foodCollect :menuList="menuList" @go="go"></foodCollect>
+    <menuCollect :menuList="menuList" @go="go"></menuCollect>
   </div>  
 </template>
 
 <script>
-import foodCollect from '@/components/food/foodCollect'
+import menuCollect from '@/components/food/menuCollect'
 export default {
-    components:{foodCollect},
+    components:{menuCollect},
   data(){
     return{
      menuList:'',
@@ -20,7 +20,7 @@ export default {
     // 连接数据库
     ajx(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection('foodCollect').where({
+        db.collection('menuCollect').where({
             _openid:this.globalData.openid
         }).get({
             success:res=>{
@@ -31,7 +31,7 @@ export default {
     go(index,id){
         this.index=index;
         this.id=id;
-        mpvue.navigateTo({url:'../menuDetail/main?index='+this.index+'&id='+this.id+'&type='+'foodCollect'+'&url='+this.getPages()});
+        mpvue.navigateTo({url:'../menuDetail/main?index='+this.index+'&id='+this.id+'&type='+'menuCollect'+'&url='+this.getPages()});
     },
     //获取页面url
     getPages(){

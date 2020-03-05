@@ -3,7 +3,6 @@
   "navigationBarBackgroundColor":"#d3e9f9",
   "usingComponents":{
     "van-search": "/static/vant/search/index",
-    "van-loading":"/static/vant/loading/index",
-    "van-icon":"/static/vant/icon/index"
+    "van-loading":"/static/vant/loading/index"
   }
 }

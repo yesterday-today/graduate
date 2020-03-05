@@ -13,8 +13,10 @@
     "pages/counter/main",
     "pages/my/main",
     "pages/set/main",
+    "pages/setLocation/main",
     "pages/aboutIt/main",
     "pages/food/main",
+    "pages/foodCollect/main",
     "pages/menu/main",
     "pages/menuSort/main",
     "pages/menuDetail/main",
@@ -39,7 +41,7 @@
   },
   "tabBar": {
     "color": "#075fe4",
-    "backgroundColor": "#fafafa",
+    "backgroundColor": "#d9eefc",
     "selectedColor": "#ec3e30",
     "borderStyle": "white",
 

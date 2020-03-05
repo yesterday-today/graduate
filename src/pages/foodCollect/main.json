@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "美食最爱",
+  "usingComponents":{
+    "van-toast": "/static/vant/toast/index"
+  }
+}

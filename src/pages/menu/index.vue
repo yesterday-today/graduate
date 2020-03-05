@@ -43,7 +43,7 @@ export default {
         },
         {
           img:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/zhMenu.png",
-          title:'主食',
+          title:'中华菜系',
         },
         {
           img:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/sjMenu.png",
