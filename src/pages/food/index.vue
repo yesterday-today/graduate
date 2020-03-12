@@ -1,8 +1,9 @@
 <template>
   <div class="my">
     <div class="top">
-      <headerTop @goMap="goLocation"></headerTop>
+      <headerTop @goMap="goLocation" :area="area" :detail="detail"></headerTop>
     </div>
+    <selectArea v-if="popBol==true" @selectValue="selectValue"></selectArea>
     <swipers :img="imgUrls"></swipers>
     <div class="tab">
       <ul>
@@ -15,7 +16,7 @@
     <div class="Ready">
         <p class="title">{{title}}:</p>
         <div class="section" v-if="tabindex!=5">
-            <div class="value" v-for="(item,index) in vals" :key="index" @click="select(index)" :class="{'bk':index==selectValue}">
+            <div class="value" v-for="(item,index) in vals" :key="index" @click="select(index)" :class="{'bk':index==selectIndex}">
             <p>{{item}}</p>  
             </div>  
         </div>
@@ -23,7 +24,7 @@
             <p>查看更多</p>  
         </div>
     </div>
-    <location v-if="popBol"@popupConfirm="popupConfirm" @popupCancel="popupCancel"></location>
+    <!-- <location v-if="popBol"@popupConfirm="popupConfirm" @popupCancel="popupCancel"></location> -->
     <foodReadys :food="foodList" :tab="tabindex" v-if="tabindex!=5" @goMap="goMap" @collect="collect"></foodReadys>
     <foodMenu :menuList="menuList" @go="go" v-if="tabindex==5"></foodMenu>
     <van-toast id="van-toast"/>
@@ -36,11 +37,12 @@ import headerTop from '@/components/headerTop'
 import swipers from '@/components/swiper'
 import foodReadys from '@/components/food/foodReady'
 import foodMenu from '@/components/food/foodMenu'
-import location from '@/components/location'
+// import location from '@/components/location'
+import selectArea from '@/components/house/selectArea';
 import Toast from '../../../static/vant/toast/toast';
 
 export default {
-  components: {headerTop,swipers,foodReadys,foodMenu,location},
+  components: {headerTop,swipers,foodReadys,foodMenu,selectArea},
   data(){
     return{
       tabindex: 0,
@@ -50,7 +52,7 @@ export default {
       vals: ["智能排序","人气最高", "最便宜"],
       address:'',
       menuList:'',
-      selectValue: 0,
+      selectIndex: 0,
       index:'',
       imgUrls: [
         {img:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/swiper1.jpg"},
@@ -84,7 +86,9 @@ export default {
           imgUrl: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/foodCp.png",
           title: "菜谱"
         }],
-        foodList:[]
+        foodList:[],
+        area:'不限',
+        detail:'',
     }
   },
   methods:{
@@ -128,19 +132,43 @@ export default {
             }
         });
     },
+    // 连接数据库
+    getArea(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('personMessage').where({
+            _openid:this.globalData.openid
+        }).get({
+            success:res=>{
+                console.log(res)
+                this.area=res.data[0].district;
+                this.detail=res.data[0].street;
+            }
+        });
+    },
     //点击美食菜单进行收藏
     collect(id,data){
         this.addCollect(id,data);
     },
     goLocation(){
         this.popBol=true;
+        console.log(this.popBol)
     },
-    popupCancel(){
-        this.popBol=false;
+    //选择详细地址
+    selectValue(area,detail){
+        this.area=area;
+        this.detail=detail;
+        setTimeout(()=>{
+            this.popBol=false;
+        },500)
+        console.log(area,detail)
+        // this.get(this.area,this.detail);
     },
-    popupConfirm(){
+    // popupCancel(){
+    //     this.popBol=false;
+    // },
+    // popupConfirm(){
 
-    },
+    // },
     ontab(index) {
       this.tabindex = index;
       this.title = this.tabList[index].title;
@@ -162,7 +190,7 @@ export default {
         mpvue.navigateTo({url:'../menu/main'});
     },
     select(index){
-      this.selectValue=index;
+      this.selectIndex=index;
       if(index==1){
         this.foodList.sort((a,b)=>{
             return b.comment-a.comment;
@@ -184,6 +212,7 @@ export default {
   mounted(){
       this.ajx();
       this.ajax();
+      this.getArea();
   },
 }
 </script>

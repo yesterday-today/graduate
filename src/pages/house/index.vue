@@ -20,7 +20,6 @@ import selection from '@/components/selection';
 import houseReady from '@/components/house/houseReady';
 import selectArea from '@/components/house/selectArea';
 
-
 export default {
   components: {headerTop,swipers,selection,houseReady,selectArea},
   data() {
@@ -80,27 +79,25 @@ export default {
     }
   },
   methods:{
-      //跳转到详情页
-      goDetail(id){
-        mpvue.navigateTo({url:'../houseDetail/main?id='+id});
-
-      },
-      goSelect(){
-          this.selectBol=true;
-      },
-      //选择详细地址
-      selectValue(area,detail){
-          this.area=area;
-          this.detail=detail;
-          setTimeout(()=>{
-              this.selectBol=false;
-          },500)
-          this.get();
-      },
-      get(){
+    // 连接数据库
+    ajx(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('personMessage').where({
+            _openid:this.globalData.openid
+        }).get({
+            success:res=>{
+                console.log(res)
+                this.area=res.data[0].district;
+                this.detail=res.data[0].street;
+                this.get(this.area,this.detail);
+            }
+        });
+    },
+      get(area,detail){
+          console.log(area,detail)
           wx.request({
-            //   url:'http://localhost:8888/house',//本地服务器地址
-              url:'http://192.168.1.6:8888/house/city='+this.area+'/district='+this.detail,//本地服务器地址
+              url:'http://localhost:8888/house/city='+area+'/district='+detail, //本地服务器地址
+            //   url:'http://192.168.1.4:8888/house/city='+this.area+'/district='+this.detail,//本地服务器地址
               data:{
                 rent:this.rent,
                 price:this.priceType,
@@ -108,7 +105,6 @@ export default {
                 time:this.timeType
               },
               success:res=>{
-                  console.log(this.area)
                   if(res.statusCode==200){
                       this.houseData=res.data;
                       this.all=res.data.length;
@@ -132,11 +128,31 @@ export default {
           this.timeType=this.array[3]=='其他'?this.timeType=3:this.array[3]=='月租'
                         ?this.timeType=2:this.array[3]=='年租'
                         ?this.timeType=1:this.timeType=0
-          this.get();
+          this.get(this.area,this.detail);
       },
+        //跳转到详情页
+    goDetail(id){
+      mpvue.navigateTo({url:'../houseDetail/main?id='+id});
+
+    },
+    goSelect(){
+        this.selectBol=true;
+    },
+    //选择详细地址
+    selectValue(area,detail){
+        this.area=area;
+        this.detail=detail;
+        setTimeout(()=>{
+            this.selectBol=false;
+        },500)
+        this.get(this.area,this.detail);
+    },
   },
   mounted(){
-      this.get();
+      this.ajx();
+  },
+  onLoad(options){
+    Object.assign(this.$data, this.$options.data());//加载页面时，重置数据
   }
 };
 </script>

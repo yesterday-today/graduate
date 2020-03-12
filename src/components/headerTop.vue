@@ -1,7 +1,7 @@
 <template>
     <div class="index">
         <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/location.png" />
-        <p @click="go" v-if="this.area!='丝陝'">{{area}}?({{detail}})</p>
+        <p @click="go" v-if="this.area!='丝陝'">{{area}}({{detail}})</p>
         <p @click="go" v-else>{{area}}</p>
         <i class="iconfont icon-qianjin"></i>
 	</div>

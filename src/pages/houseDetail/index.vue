@@ -79,18 +79,6 @@ export default {
       imgUrls: [],//房源图片
       tabTop: ["房租", "户型", "面积"],
       basicList: [],//基本信息
-    //   MatchList: [
-    //     { img:"cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match1.png", desc: "电视" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match2.png", desc: "冰箱" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match3.png", desc: "洗衣机" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match4.png", desc: "空调" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match5.png", desc: "热水器" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match6.png", desc: "床" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match7.png", desc: "暖气" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match8.png", desc: "宽带" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match9.png", desc: "衣柜" },
-    //     { img: "cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/match10.png", desc: "天然气" }
-    //   ],
       link:[],//联系人方式
       address:'',//房源详情地址
       facilities:[],//房源设施
@@ -100,8 +88,8 @@ export default {
   methods: {
     get(){
         wx.request({
-        //   url:'http://localhost:8888/house',//本地服务器地址
-            url:'http://192.168.1.6:8888/house/id='+this.id,//本地服务器地址
+          url:'http://localhost:8888/house/id='+this.id,//本地服务器地址
+            // url:'http://192.168.1.6:8888/house/id='+this.id,//本地服务器地址
             success:res=>{
                 if(res.statusCode==200){
                     this.data=res.data[0];
@@ -167,11 +155,11 @@ export default {
         if(this.collect==false){
             this.collect=true;
             this.addCollect();
-    }else{
-        this.collect=false;
-        this.removeCollect();
+        }else{
+            this.collect=false;
+            this.removeCollect();
+            }
         }
-    }
   },
   mounted() {
     this.get();
