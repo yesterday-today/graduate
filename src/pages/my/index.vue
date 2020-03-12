@@ -87,6 +87,8 @@ export default {
         this.warnBol==false&&mpvue.navigateTo({url:'../menuCollect/main'})
       }else if(index==2){
         this.warnBol==false&&mpvue.navigateTo({url:'../houseCollect/main'})
+      }else if(index==0){
+        this.warnBol==false&&mpvue.navigateTo({url:'../foodCollect/main'})
       }
     },
     //去设置页面
@@ -181,7 +183,6 @@ export default {
           float:left;
         }
         &-name{
-          width:200rpx;
           height:120rpx;
           line-height:120rpx;
           float:left;
@@ -191,6 +192,7 @@ export default {
             font-size:40rpx;
             color:#ffffff;
             display:block;
+            letter-spacing:5rpx;
           }
           button{
               padding:0rpx;
