@@ -24,7 +24,6 @@
             <p>查看更多</p>  
         </div>
     </div>
-    <!-- <location v-if="popBol"@popupConfirm="popupConfirm" @popupCancel="popupCancel"></location> -->
     <foodReadys :food="foodList" :tab="tabindex" v-if="tabindex!=5" @goMap="goMap" @collect="collect"></foodReadys>
     <foodMenu :menuList="menuList" @go="go" v-if="tabindex==5"></foodMenu>
     <van-toast id="van-toast"/>
@@ -37,7 +36,6 @@ import headerTop from '@/components/headerTop'
 import swipers from '@/components/swiper'
 import foodReadys from '@/components/food/foodReady'
 import foodMenu from '@/components/food/foodMenu'
-// import location from '@/components/location'
 import selectArea from '@/components/house/selectArea';
 import Toast from '../../../static/vant/toast/toast';
 

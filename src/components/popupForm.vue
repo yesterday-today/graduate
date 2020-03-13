@@ -1,8 +1,8 @@
 <template>
     <div class="location">
         <div class="wrap">
-            <p class="title">定位确认</p>
-            <p class=“detail>打开定位服务来获取定位信息</p>
+            <p class="title">{{formText.title}}</p>
+            <p class=“detail>{{formText.text}}</p>
             <div class="bot">
                 <div class="left" @click="clear">
                     <p>取消</p>
@@ -20,6 +20,7 @@
 
 <script>
 export default {
+    props:['formText'],
     data(){
         return{
         }

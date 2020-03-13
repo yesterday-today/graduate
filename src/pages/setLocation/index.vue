@@ -112,7 +112,7 @@ export default {
                 _id:this.globalData.openid,
                 province:this.province,
                 city:this.backfill.city,
-                district:this.backfill.district.substring(0,2),
+                district:this.backfill.district,
                 title:this.backfill.title,
                 street:this.street,
             },
@@ -155,7 +155,6 @@ export default {
                 });
             }
             this.suggestion=sug;
-            console.log(this.suggestion)
         },
         fail: error=> {
             // console.error(error);

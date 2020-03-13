@@ -6,7 +6,7 @@
                 <div class="img">
                     <i class="iconfont icon-gongjiao"></i>
                 </div>
-                <p>{{item.lineName}}路</p>
+                <p>{{item.cityName}}{{item.lineName}}路</p>
             </li>
          </ul>
          <div class="bot" @click="clear" v-if="data.length!=0">
@@ -62,7 +62,7 @@ export default {
                     }
                 }
                 p{
-                    font-size:32rpx;
+                    font-size:28rpx;
                     line-height:100rpx;
                     // float: left;
                 }
