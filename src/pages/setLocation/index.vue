@@ -18,14 +18,14 @@
     </div>
     <div class="modify">
         <div class="input">
-            <input style="background: #fff;" @input="getsuggest" :value="backfill.title"></input>
+            <input style="background: #fff;" @input="getsuggest" :value="backfill.title" placeholder="请输入您所住地址"></input>
         </div>
         <ul v-if="suggestion!=''&&showBol==true">
             <li v-for="(item,index) in suggestion" :key="index" @click="select(index)">
                 <p>{{item.title}}</p>
             </li>
         </ul>
-        <div class="street"><span>街道:</span><input @input="getstreet" :value="street"></input></div>
+        <div class="street"><span>街道:</span><input @input="getstreet" :value="street" placeholder="请输入您所住街道"></input></div>
         <div class="save" @click="save">
             保存地址
         </div>
@@ -72,11 +72,10 @@ export default {
             _openid:this.globalData.openid
         }).get({
             success:res=>{
-                console.log(res)
-                this.city=res.data[0].city;
-                this.area=res.data[0].district;
-                this.street=res.data[0].street;
-                this.detailValue=res.data[0].title;
+                this.city=res.data[0].address.city;
+                this.area=res.data[0].address.district;
+                this.street=res.data[0].address.street;
+                this.detailValue=res.data[0].address.title;
                 this.query(this.province,this.city,this.area,this.street)
             }
         });
@@ -105,27 +104,34 @@ export default {
     },
     //保存地址到数据库中
     save(){
-        console.log(this.backfill)
-        const db = wx.cloud.database({env: 'ybb-901hf'})
-        db.collection('personMessage').add({
-            data:{
-                _id:this.globalData.openid,
-                province:this.province,
-                city:this.backfill.city,
-                district:this.backfill.district,
-                title:this.backfill.title,
-                street:this.street,
-            },
-            success:res=>{
-                this.addressList.city=this.backfill.city.substring(0, 2);
-                this.addressList.area=this.backfill.district.substring(0, 2);
-                this.detailValue=this.backfill.title;
-                Toast('保存成功');
-            },
-            fail:res=>{
-                console.log(res)
-            }
-        });
+        if(this.street!=''&&this.backfill!=''){
+            const db = wx.cloud.database({env: 'ybb-901hf'})
+            db.collection('personMessage').doc(this.globalData.openid).update({
+                data:{
+                    address:{
+                        province:this.province,
+                        city:this.backfill.city,
+                        district:this.backfill.district,
+                        title:this.backfill.title,
+                        street:this.street,
+                    }
+                },
+                success:res=>{
+                    console.log(res)
+                    this.addressList.city=this.backfill.city.substring(0, 2);
+                    this.addressList.area=this.backfill.district.substring(0, 2);
+                    this.detailValue=this.backfill.title;
+                    Toast('保存成功');
+                },
+                fail:res=>{
+                    console.log(res)
+                }
+            });
+        }
+        else{
+            this.street==''&&Toast('您还未输入街道名称');
+            this.backfill==''&&Toast('您还未输入您所住地址');
+        }
     },
     //获取街道值
     getstreet(e){
@@ -141,7 +147,6 @@ export default {
         //获取输入框值并设置keyword参数
           keyword: e.mp.detail.value, //用户输入的关键词，可设置固定值
           success: res=> {//搜索成功后的回调
-          console.log(res)
             var sug = [];
             for (var i = 0; i < res.data.length; i++) {
                 sug.push({ // 获取返回结果，放到sug数组中

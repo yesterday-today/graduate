@@ -83,7 +83,6 @@ export default {
       }).get({
         success:res=>{
           this.historyList=res.data;
-          console.log(this.historyList)
         }
       });
     },

@@ -8,6 +8,7 @@
 <script>
 import remindList from '@/components/bus/remindList'
 import remindListNo from '@/components/bus/remindListNo'
+import Toast from '../../../dist/wx/static/vant/toast/toast'
 
 export default {
     components:{remindList,remindListNo},
@@ -21,6 +22,47 @@ export default {
   },
 
   methods: {
+    getSet(){
+        wx.getSetting({
+            //同意获取用户订阅消息的状态
+            withSubscriptions: true,
+            success (res) {
+                //authSetting用户授权结果，subscriptionsSetting用户订阅消息设置
+                console.log(res.authSetting)
+                // res.authSetting = {
+                //   "scope.userInfo": true,
+                //   "scope.userLocation": true
+                // }
+                console.log(res.subscriptionsSetting)
+                // res.subscriptionsSetting = {
+                //   mainSwitch: true, // 订阅消息总开关
+                //   itemSettings: {   // 每一项开关
+                //     SYS_MSG_TYPE_INTERACTIVE: 'accept', // 小游戏系统订阅消息
+                //     SYS_MSG_TYPE_RANK: 'accept'
+                //     zun-LzcQyW-edafCVvzPkK4de2Rllr1fFpw2A_x0oXE: 'reject', // 普通一次性订阅消息
+                //     ke_OZC_66gZxALLcsuI7ilCJSP2OJ2vWo2ooUPpkWrw: 'ban',
+                //   }
+                // }
+            }
+        })
+    },
+    remind(){
+         wx.cloud.callFunction({
+             name:'remindMessage',
+             data:{
+                 date4:'12月22日 08:45',
+                 thing2:'222路',
+                 thing1:'200米',
+                 thing3:'台东路',
+                 thing5:'你好，公交即将到达，请注意出门时间！'
+             },
+             success:res=>{
+                 console.log("remind",res)
+                
+             },
+             
+         })
+    },
     //判断是否设置了提醒
     warn(){
         const db = wx.cloud.database({env: 'ybb-901hf'});
@@ -57,7 +99,9 @@ export default {
     }
   },
   mounted(){
+      this.getSet();
       this.warn();
+      this.remind();
   },
   watch(){
     if (getCurrentPages().length != 0) {

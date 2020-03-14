@@ -85,7 +85,7 @@ export default {
           title: "菜谱"
         }],
         foodList:[],
-        area:'不限',
+        area:'',
         detail:'',
     }
   },
@@ -138,8 +138,8 @@ export default {
         }).get({
             success:res=>{
                 console.log(res)
-                this.area=res.data[0].district;
-                this.detail=res.data[0].street;
+                this.area=res.data[0].address.district;
+                this.detail=res.data[0].address.street;
             }
         });
     },

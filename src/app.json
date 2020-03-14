@@ -12,6 +12,7 @@
     "pages/houseCollect/main",
     "pages/counter/main",
     "pages/my/main",
+    "pages/notify/main",
     "pages/set/main",
     "pages/setLocation/main",
     "pages/aboutIt/main",

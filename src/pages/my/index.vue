@@ -26,7 +26,7 @@
         </div>
         <div class="content2">
         <ul>
-            <li>
+            <li @click="goNotify">
                 <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/warn.png" class="left">
                 <p>通知提醒</p>
                 <i class="iconfont icon-qianjin"></i>
@@ -91,9 +91,21 @@ export default {
         this.warnBol==false&&mpvue.navigateTo({url:'../foodCollect/main'})
       }
     },
+    //去通知提醒页面
+    goNotify(){
+        this.warnBol==true&&Notify({ type: 'danger', message: '您还未登录，请登录后在进行查看' });
+        if(this.warnBol==false){
+            mpvue.navigateTo({url:'../notify/main'});
+            wx.requestSubscribeMessage({
+                tmplIds: ['VHgVCRPbHrILy--JCeOwBi18Vmtu8To1JLhm1nKXYDs'],
+                success (res) {console.log('已授权接收订阅消息')}
+            })
+        }
+    },
     //去设置页面
     goSet(){
-        mpvue.navigateTo({url:'../set/main'})
+        this.warnBol==true&&Notify({ type: 'danger', message: '您还未登录，请登录后在进行查看' });
+        this.warnBol==false&&mpvue.navigateTo({url:'../set/main'})
     },
     //去关于它的页面
     goIt(){
@@ -110,6 +122,29 @@ export default {
         console.log('请升级微信版本')
       }
     },
+    //添加用户信息
+    userInformation(){
+        const db = wx.cloud.database({env: 'ybb-901hf'})
+        db.collection('personMessage').add({
+            data:{
+                _id:this.globalData.openid,
+                address:{
+                    province:'',
+                    city:'',
+                    district:'',
+                    title:'',
+                    street:'',
+                },
+                notifyBol:false,
+            },
+            success:res=>{
+                console.log(res);
+            },
+            fail:res=>{
+                console.log(res)
+            }
+        });
+    },
     bindGetUserInfo(e) {
       // console.log(e.mp.detail.rawData)
       if (e.mp.detail.rawData){
@@ -117,6 +152,7 @@ export default {
         this.warnBol=false;
         this.getSetting();
         console.log('用户按了允许授权按钮')
+        this.userInformation();
       } else {
         //用户按了拒绝按钮
         console.log('用户按了拒绝按钮')

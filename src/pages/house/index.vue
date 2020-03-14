@@ -87,8 +87,8 @@ export default {
         }).get({
             success:res=>{
                 console.log(res)
-                this.area=res.data[0].district;
-                this.detail=res.data[0].street;
+                this.area=res.data[0].address.district;
+                this.detail=res.data[0].address.street;
                 this.get(this.area,this.detail);
             }
         });
