@@ -22,10 +22,10 @@ export default {
   data() {
     return {
       days:'',//获取天数
-			weeks:'',//获取周几
-			year:'2019',//年份
-			month:'12',//月份
-			day:'14',//天数
+        weeks:'',//获取周几
+        year:'2019',//年份
+        month:'12',//月份
+        day:'14',//天数
       id:0,
     }
   },
@@ -37,46 +37,46 @@ export default {
       mpvue.navigateTo({url:'../planDetail/main?id='+this.id});
     },
     //获取天数
-		getDate(year,month){
-			var d=new Date(year,month,0);
-			var day=d.getDate();
-			return day;
-		},
-		//获取周几
-		getWeek(year,month,day){
-			var d=new Date();
-			d.setFullYear(year,month-1,day);
-			var week = d.getDay();
-			return week;
-		},
-		WeekCount(val){
-			if(val%7==0){
-				return '周日';
-			}
-			else if(val%7==1){
-				return '周一';
-			}
-			else if(val%7==2){
-				return '周二';
-			}
-			else if(val%7==3){
-				return '周三';
-			}
-			else if(val%7==4){
-				return '周四';
-			}
-			else if(val%7==5){
-				return '周五';
-			}
-			else{
-				return '周六';
-			}
-		}
+    getDate(year,month){
+        var d=new Date(year,month,0);
+        var day=d.getDate();
+        return day;
+    },
+    //获取周几
+    getWeek(year,month,day){
+        var d=new Date();
+        d.setFullYear(year,month-1,day);
+        var week = d.getDay();
+        return week;
+    },
+    WeekCount(val){
+        if(val%7==0){
+            return '周日';
+        }
+        else if(val%7==1){
+            return '周一';
+        }
+        else if(val%7==2){
+            return '周二';
+        }
+        else if(val%7==3){
+            return '周三';
+        }
+        else if(val%7==4){
+            return '周四';
+        }
+        else if(val%7==5){
+            return '周五';
+        }
+        else{
+            return '周六';
+        }
+    }
   },
   mounted(){
     this.days=this.getDate(this.year,this.month);	
-		this.weeks=this.getWeek(this.year,this.month,this.day);
-		this.title=this.year+'年'+this.month+'月';
+    this.weeks=this.getWeek(this.year,this.month,this.day);
+    this.title=this.year+'年'+this.month+'月';
   }
 };
 </script>

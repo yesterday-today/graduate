@@ -46,15 +46,23 @@ export default {
             }
         })
     },
+    getTime(){
+      var date=new Date;
+      var month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1)+'月';
+      var day=date.getDate()+'日 ';
+      var hour=date.getHours()+':';
+	  var i=date.getMinutes();
+      i = i < 10 ? ('0' + i ) : i;
+      return month+day+hour+i;
+    },
     remind(){
          wx.cloud.callFunction({
              name:'remindMessage',
              data:{
-                 date4:'12月22日 08:45',
-                 thing2:'222路',
-                 thing1:'200米',
-                 thing3:'台东路',
-                 thing5:'你好，公交即将到达，请注意出门时间！'
+                 time:this.getTime(),
+                 line:'222路',
+                 distance:'200米',
+                 station:'台东路',
              },
              success:res=>{
                  console.log("remind",res)

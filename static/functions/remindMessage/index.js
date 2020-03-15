@@ -8,16 +8,16 @@ exports.main = async (event, context) => {
         page: '/pages/index/main',
         data: {
           date4: {
-            value:'12月22日 08:45'
+            value:event.time
           },
           thing2: {
-            value: '28路'
+            value: event.line
           },
           thing1: {
-            value: '200米'
+            value: event.distance
           },
           thing3: {
-            value: '台东路'
+            value: event.station
           },
           thing5:{
               value:'你好，公交即将到达，请注意出门时间！'

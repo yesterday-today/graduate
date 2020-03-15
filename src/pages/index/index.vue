@@ -91,6 +91,12 @@ export default {
     // selectIndex为0时是路线页面，为1时是上车提醒页面
     goLine(index){
         this.selectIndex=index;
+        if(this.selectIndex==1){
+            wx.requestSubscribeMessage({
+                tmplIds: ['VHgVCRPbHrILy--JCeOwBi18Vmtu8To1JLhm1nKXYDs'],
+                success (res) {console.log('已授权接收订阅消息')}
+            })
+        }
         this.selectIndex==0?mpvue.navigateTo({url:'../line/main'})
        :mpvue.navigateTo({url:'../remind/main?cityId='+this.cityId});
     },
