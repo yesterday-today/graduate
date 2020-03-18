@@ -5,10 +5,18 @@
             <li v-for="(item,index) in tabList" :key="index">
                 <i :class="item.i"></i>
                 <p>{{item.text}}</p>
-                <div class="switch">
+                <div class="switch" v-if="index==0">
                     <van-switch 
-                        :checked="checked"
-                        @change="onChange"
+                        :checked="busBol"
+                        @change="onBus"
+                        active-color="#07c160"
+                        inactive-color="#cecccc"
+                        size="40rpx"/>
+                </div>
+                <div class="switch" v-if="index==1">
+                    <van-switch 
+                        :checked="planBol"
+                        @change="onPlan"
                         active-color="#07c160"
                         inactive-color="#cecccc"
                         size="40rpx"/>
@@ -23,8 +31,10 @@
 export default {
   data() {
     return {
-        tabList:[{text:'公交提醒',i:'iconfont icon-gongjiao'}],
-        checked:false,
+        tabList:[{text:'公交提醒',i:'iconfont icon-gongjiao'},
+                {text:'计划提醒',i:'iconfont icon-tubiaozhizuomoban'}],
+        busBol:false,
+        planBol:false,
     }
   },
   methods: {
@@ -34,18 +44,22 @@ export default {
             _openid:this.globalData.openid
             }).get({
                 success:res=>{
-                    this.checked=res.data[0].notifyBol;
+                    this.busBol=res.data[0].notifyList.busBol;
+                    this.planBol=res.data[0].notifyList.planBol;
                 },
                 fail:res=>{
                     console.log(res)
                 }
         });
     },
-    modifyCkeck(checked){
+    modifyCkeck(){
         const db = wx.cloud.database({env: 'ybb-901hf'})
         db.collection('personMessage').doc(this.globalData.openid).update({
             data:{
-                notifyBol:checked
+                notifyList:{
+                    busBol:this.busBol,
+                    planBol:this.planBol
+                }
             },
             success:res=>{
                 console.log(res)
@@ -55,10 +69,15 @@ export default {
             }
         });
     },
-    onChange(){
-        this.checked=!this.checked;
-        this.modifyCkeck(this.checked);
+    onBus(){
+        this.busBol=!this.busBol;
+        this.modifyCkeck();
     },
+    onPlan(){
+        this.planBol=!this.planBol;
+        console.log(this.planBol)
+        this.modifyCkeck();
+    }
   },
   mounted(){
       this.checkBol();
@@ -85,6 +104,10 @@ export default {
           float:left;
           color: green;
           font-size: 40rpx;
+          
+        }
+        .icon-tubiaozhizuomoban{
+            color: #f14444;
         }
         p{
           font-size:30rpx;

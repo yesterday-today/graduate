@@ -139,7 +139,7 @@ export default {
           overflow:hidden;
           border-bottom:1rpx dotted #d3d3d3; 
         .detail {
-          width: 400rpx;
+          width: 380rpx;
           padding:10rpx;
           float: left;
           .desc1{

@@ -94,7 +94,6 @@ export default {
         });
     },
       get(area,detail){
-          console.log(area,detail)
           wx.request({
               url:'http://localhost:8888/house/city='+area+'/district='+detail, //本地服务器地址
             //   url:'http://192.168.1.4:8888/house/city='+this.area+'/district='+this.detail,//本地服务器地址
@@ -105,6 +104,7 @@ export default {
                 time:this.timeType
               },
               success:res=>{
+                  console.log(res);
                   if(res.statusCode==200){
                       this.houseData=res.data;
                       this.all=res.data.length;

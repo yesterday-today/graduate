@@ -109,7 +109,6 @@ export default {
       },
     //判断是否收藏了
     collectBol(){
-        console.log(this.id)
         const db = wx.cloud.database({env: 'ybb-901hf'});
         db.collection('houseCollect').where({
             _id:parseInt(this.id)

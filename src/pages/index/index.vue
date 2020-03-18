@@ -61,6 +61,11 @@ export default {
             { text: '泉州', value: 103 }
         ],
         value1:82,
+        countDay:'',//获取天数
+        year:'',//年份
+        month:'',//月份
+        today:'',//获取天数
+        planData:[],
       }
   },
   methods: {
@@ -86,7 +91,12 @@ export default {
         }
       });
     },
-    onClick(event){
+    goSearch(){
+        mpvue.navigateTo({url:'../search/main?cityId='+this.value1});
+    },
+    //获取选择地区
+    change(e){
+        this.value1=e.mp.detail;
     },
     // selectIndex为0时是路线页面，为1时是上车提醒页面
     goLine(index){
@@ -100,12 +110,7 @@ export default {
         this.selectIndex==0?mpvue.navigateTo({url:'../line/main'})
        :mpvue.navigateTo({url:'../remind/main?cityId='+this.cityId});
     },
-    goSearch(){
-        mpvue.navigateTo({url:'../search/main?cityId='+this.value1});
-    },
-    //获取选择地区
-    change(e){
-        this.value1=e.mp.detail;
+    onClick(event){
     },
     //从收藏列表跳转到公交详情页
     goBus(id,num){
@@ -142,13 +147,57 @@ export default {
     popupConfirm(){
         this.popupBol=false;
         this.cancel();
-    }
+    },
+    //--获取计划时间,发模版消息--//
+    getTime(){
+      var date=new Date;
+      this.year=date.getFullYear();
+      this.month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1);
+      this.today=date.getDate();
+      this.getData();//获取数据
+    },
+    getData(){
+        const db = wx.cloud.database({env: 'ybb-901hf'});
+        db.collection('plan').where({
+            _id:this.globalData.openid+this.month,
+        }).get({
+            success:res=>{
+                console.log(res);
+                if(res.data[0].month==this.month){
+                    this.planData=res.data[0].data;
+                    this.getRemind();
+                }
+            }
+        })
+    },
+    getRemind(){
+        if(this.planData[this.today].thing!=''){
+            this.remind(this.planData[this.today].thing,this.planData[this.today].time);
+        }
+    },
+    remind(thing,time){
+         wx.cloud.callFunction({
+            name:'planRemind',
+            data:{
+                thing:thing,
+                time:time,
+             },
+            success:res=>{
+                console.log("remind",res)
+            },
+            fail:res=>{
+                console.log(res)
+            }
+         })
+    },
   },
+  //每次打开页面都会调用一次
   onShow(){
     this.ajax();
   },
   mounted(){
     this.ajx();
+    this.getTime();
     this.ajax();
   }
 }

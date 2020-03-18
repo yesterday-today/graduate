@@ -5,7 +5,7 @@
         <span class="left">计划内容(0/60)</span>
       </div>
       <div class="detail clear">
-        <input type="text"/>
+        <input type="text" @input="input" :value="thing"/>
       </div>
       <div class="time">
         <p class="left">时间</p>
@@ -14,18 +14,18 @@
       <div class="repeat" @click="gorepeat">
         <p class="left">重复</p>
         <div class="right">
-          <p>{{selectValue}}</p>
+          <p>{{selectValue==''?'不重复':selectValue}}</p>
           <i class="iconfont icon-qianjin"></i>
         </div>
       </div>
       <div class="remind" @click="goremind">
         <p class="left">提醒</p>
         <div class="right">
-          <p>{{remindValue}}</p>
+          <p>{{remindValue==''?'当天提醒':remindValue}}</p>
           <i class="iconfont icon-qianjin"></i>
         </div>
       </div>
-      <div class="btn">保存</div>
+      <div class="btn" @click="save">保存</div>
     </div>
     <div class="picker" v-if="timeBol==true">
         <div class="wrap">
@@ -58,34 +58,88 @@ export default {
       remindBol:false,
       timeBol:false,
       selectValue:'不重复',
-      remindValue:'不提醒',
+      remindValue:'当天提醒',
+      thing:'',//事件时间
       minHour: 10,
       maxHour: 20,
       minDate: new Date().getTime(),
       maxDate: new Date(2029, 12, 31).getTime(),
-      currentDate: new Date().getTime()
+      currentDate: new Date().getTime(),
+      year:'',//获取年，
+      month:'',//获取月份，
+      day:'',//获取天
+      planTxt:[],//当天数据
+      planData:[],//获取收据
     }
   },
   methods:{
-    getTime(){
-      var date=new Date;
-      var year=date.getFullYear()+'-';
-      var month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1)+'-';
-      var day=date.getDate()+' ';
-      var hour=date.getHours()+':';
-	  var i=date.getMinutes();
-      i = i < 10 ? ('0' + i ) : i;
-      return year+month+day+hour+i;
+    //保存到数据库
+    save(){
+        this.updateData();
     },
-    //时间戳转换
-    toTime(val){
-        var date=new Date(parseInt(val));
-        var year=date.getFullYear()+'-';
-        var month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1)+'-';
-        var day=date.getDate()+' ';
-        var hour=date.getHours()+':';
-        var minute=date.getMinutes();
-        this.currentT=year+month+day+hour+minute;
+    //修改数据库
+    updateData(){
+      this.planData.data[this.day-1].thing=this.thing;
+      this.planData.data[this.day-1].time=this.time;
+      this.planData.data[this.day-1].selectValue=this.selectValue;
+      this.planData.data[this.day-1].remindValue=this.remindValue;
+      this.$set(this.planData,this.day,{thing:this.thing})
+      var id=this.globalData.openid+this.month;
+      const db = wx.cloud.database({env: 'ybb-901hf'})
+      db.collection('plan').doc(id).update({
+        data:{
+            data:this.planData.data
+        },
+        success:res=>{
+            console.log(res);
+            //成功则跳转到计划列表
+            mpvue.navigateTo({url:'../plan/main'});
+        },
+        fail:res=>{
+            console.log(res)
+        }
+      });
+    },
+    //判断是否有数据，获取数据
+    getData(){
+        const db = wx.cloud.database({env: 'ybb-901hf'});
+        db.collection('plan').where({
+            _id:this.globalData.openid+this.month
+        }).get({
+            success:res=>{
+                var data=res.data[0].data;
+                var num=Number(this.day)-1
+                if(data[num].thing!=''){
+                    this.planData=res.data[0];
+                    this.planTxt=res.data[0].data[num];
+                    this.thing=this.planTxt.thing;
+                    this.time=this.planTxt.time;
+                    this.remindValue=this.planTxt.remindValue;
+                    this.selectValue=this.planTxt.selectValue;
+                }
+            },
+            fail:res=>{
+                console.log(res)
+            }
+        })
+    },
+    //获取输入框文本
+    input(e){
+        this.thing=e.mp.detail.value;
+    },
+    //设置时间
+    onInput(event) {
+        this.currentDate= event.mp.detail;
+    },
+    //确认时间
+    onConfirm(event){
+        this.currentDate= event.mp.detail
+        this.timeBol=false;
+        console.log(this.toTime(this.currentDate));
+    },
+    //取消时间
+    onCancel(){
+        this.timeBol=false;
     },
     //设置提醒时间
     setTime(){
@@ -113,24 +167,26 @@ export default {
       },700);
       this.remindValue=val;
     },
-    //设置时间
-    onInput(event) {
-        this.currentDate= event.mp.detail
-        console.log(this.currentDate)
+    //时间戳转换
+    toTime(val){
+        var date=new Date(parseInt(val));
+        var year=date.getFullYear()+'-';
+        var month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1)+'-';
+        var day=date.getDate()+' ';
+        var hour=date.getHours()+':';
+        var minute=date.getMinutes();
+        this.currentT=year+month+day+hour+minute;
     },
-    //确认时间
-    onConfirm(event){
-        this.currentDate= event.mp.detail
-        this.timeBol=false;
-        console.log(this.toTime(this.currentDate));
-    },
-    //取消时间
-    onCancel(){
-        this.timeBol=false;
-    }
   },
   mounted(){
-    this.currentT=this.getTime();
+      this.getData();
+      wx.setNavigationBarTitle({title:this.month+'月'+this.day+'日'})
+  },
+  onLoad(options){
+      this.currentT=options.year+'-'+options.month+'-'+options.day+' '+'08:00';
+      this.year=options.year;
+      this.month=options.month;
+      this.day=options.day;
   }
 }
 </script>

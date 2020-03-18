@@ -2,7 +2,7 @@
   <div class="It">
       <div class="It-top">
           <div class="img">
-              <img src="" alt="">
+              <img src="cloud://ybb-901hf.7962-ybb-901hf-1300364759/img/timg.jpg" alt="">
           </div>
           <div class="content">
               <p class="name">上班火箭军</p>
@@ -55,6 +55,7 @@ export default {
                 position:absolute;
                 left:50%;
                 transform: translateX(-50%);
+                border-radius: 50%;
             }
         }
         .content{

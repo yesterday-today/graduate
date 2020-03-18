@@ -83,6 +83,7 @@ export default {
       this.warnBol==true&&Notify({ type: 'danger', message: '您还未登录，请登录后在进行查看' });
       if(index==4){
         this.warnBol==false&&mpvue.navigateTo({url:'../plan/main'})
+        console.log(index)
       }else if(index==3){
         this.warnBol==false&&mpvue.navigateTo({url:'../menuCollect/main'})
       }else if(index==2){
@@ -97,7 +98,7 @@ export default {
         if(this.warnBol==false){
             mpvue.navigateTo({url:'../notify/main'});
             wx.requestSubscribeMessage({
-                tmplIds: ['VHgVCRPbHrILy--JCeOwBi18Vmtu8To1JLhm1nKXYDs'],
+                tmplIds: ['VHgVCRPbHrILy--JCeOwBi18Vmtu8To1JLhm1nKXYDs','cEGIIOgbX_V-IiTbYL1LKl9A9AWBC5WUE91Frkbn9gM'],
                 success (res) {console.log('已授权接收订阅消息')}
             })
         }
@@ -135,7 +136,10 @@ export default {
                     title:'',
                     street:'',
                 },
-                notifyBol:false,
+                notifyList:{
+                    busBol:false,
+                    planBol:false
+                },
             },
             success:res=>{
                 console.log(res);
