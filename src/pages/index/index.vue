@@ -162,6 +162,7 @@ export default {
             _id:this.globalData.openid+this.month,
         }).get({
             success:res=>{
+                console.log("openid",this.globalData.openid+this.month)
                 console.log(res);
                 if(res.data[0].month==this.month){
                     this.planData=res.data[0].data;
@@ -171,8 +172,8 @@ export default {
         })
     },
     getRemind(){
-        if(this.planData[this.today].thing!=''){
-            this.remind(this.planData[this.today].thing,this.planData[this.today].time);
+        if(this.planData[this.today-1].thing!=''){
+            this.remind(this.planData[this.today-1].thing,this.planData[this.today-1].time);
         }
     },
     remind(thing,time){
@@ -194,6 +195,8 @@ export default {
   //每次打开页面都会调用一次
   onShow(){
     this.ajax();
+    // this.getTime();
+
   },
   mounted(){
     this.ajx();

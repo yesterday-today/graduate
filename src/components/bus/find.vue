@@ -15,11 +15,13 @@
             <p>{{item.title}}</p>
         </li>
     </ul>
+    <van-toast id="van-toast"/>
   </div>
 </template>
 
 <script>
 import QQMapWX from '../../../static/js/qqmap-wx-jssdk.js';
+import Toast from '../../../dist/wx/static/vant/toast/toast';
 const QQMapSDK = new QQMapWX({
   key: 'D4JBZ-4ZQWD-GGM4B-HS3XZ-VQJYE-7CB6H'
 })
@@ -101,9 +103,14 @@ export default {
     },
     search(){
         let plugin = requirePlugin('mapPlugin');
-        this.geton=='我的位置'&&mpvue.navigateTo({url:'plugin://mapPlugin/index?key=' + 'D4JBZ-4ZQWD-GGM4B-HS3XZ-VQJYE-7CB6H' + '&referer=' + '达人哒' + '&endPoint=' + JSON.stringify(this.getoffData)});
-        this.geton!='我的位置'&&mpvue.navigateTo({url:'plugin://mapPlugin/index?key=' + 'D4JBZ-4ZQWD-GGM4B-HS3XZ-VQJYE-7CB6H' + '&referer=' + '达人哒' + '&startPoint=' + JSON.stringify(this.getonData)+ '&endPoint=' + JSON.stringify(this.getoffData)});
-        this.addCollect();
+        if(this.geton!=''&&this.getoff!=''){
+            this.geton=='我的位置'&&mpvue.navigateTo({url:'plugin://mapPlugin/index?key=' + 'D4JBZ-4ZQWD-GGM4B-HS3XZ-VQJYE-7CB6H' + '&referer=' + '达人哒' + '&endPoint=' + JSON.stringify(this.getoffData)});
+            this.geton!='我的位置'&&mpvue.navigateTo({url:'plugin://mapPlugin/index?key=' + 'D4JBZ-4ZQWD-GGM4B-HS3XZ-VQJYE-7CB6H' + '&referer=' + '达人哒' + '&startPoint=' + JSON.stringify(this.getonData)+ '&endPoint=' + JSON.stringify(this.getoffData)});
+            this.addCollect();
+        }
+        else{
+            Toast("起终点不能为空");
+        }
     },
     fx(){
         this.getonFz=this.geton;

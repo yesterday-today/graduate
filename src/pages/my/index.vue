@@ -83,7 +83,6 @@ export default {
       this.warnBol==true&&Notify({ type: 'danger', message: '您还未登录，请登录后在进行查看' });
       if(index==4){
         this.warnBol==false&&mpvue.navigateTo({url:'../plan/main'})
-        console.log(index)
       }else if(index==3){
         this.warnBol==false&&mpvue.navigateTo({url:'../menuCollect/main'})
       }else if(index==2){

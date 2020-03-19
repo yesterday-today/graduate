@@ -31,6 +31,7 @@ export default {
         today:'',//获取今天号数
         countDay:'',//获取天数
         id:0,
+        day:"14",
         planData:[],//当月的数据
     }
   },
@@ -53,8 +54,8 @@ export default {
     },
     getRemind(){
         //获取到今天的数据，则调用计划提醒模版
-        if(this.planData[this.today].thing!=''){
-            this.remind(this.planData[this.today].thing,this.planData[this.today].time);
+        if(this.planData[this.today-1].thing!=''){
+            this.remind(this.planData[this.today-1].thing,this.planData[this.today-1].time);
         }
     },
     //添加月份数据，创建数组集合
@@ -100,7 +101,7 @@ export default {
       this.month=(date.getMonth()+1<10?'0'+(date.getMonth()+1):date.getMonth()+1);
       this.today=date.getDate();
       this.countDay=this.getDate(this.year,this.month);
-      this.weeks=this.getWeek(this.year,this.month,this.today);
+      this.weeks=this.getWeek(this.year,this.month,this.day);
       this.create(this.countDay);
       this.getData();//天数列表显示后获取数据
       wx.setNavigationBarTitle({title:this.month+'月'});
@@ -124,6 +125,7 @@ export default {
         d.setFullYear(year,month-1,day);
         var week = d.getDay();
         return week;
+        console.log(week)
     },
     //跳转到计划单详情页
     goDetail(index){
@@ -136,6 +138,7 @@ export default {
     this.getTime();
   },
   mounted(){
+    
   }
 };
 </script>

@@ -42,12 +42,15 @@
     </div>
     <repeat @change="change" v-if="selectBol==true"></repeat>
     <remind @remind="remind" v-if="remindBol==true"></remind>
+    <van-toast id="van-toast"/>
+
   </div>
 </template>
 
 <script>
 import repeat from '@/components/plan/repeat'
 import remind from '@/components/plan/remind'
+import Toast from '../../../static/vant/toast/toast';
 
 export default {
   components:{repeat,remind},
@@ -75,15 +78,23 @@ export default {
   methods:{
     //保存到数据库
     save(){
-        this.updateData();
+        if(this.thing!=''&&this.currentT!=''&&this.selectValue!=''&&this.remindValue!=''){
+            Toast("正在保存中，请稍后");
+            this.updateData();
+        }
+        else{
+            Toast("不能为空，请重新填写")
+        }
     },
     //修改数据库
     updateData(){
       this.planData.data[this.day-1].thing=this.thing;
-      this.planData.data[this.day-1].time=this.time;
+      this.planData.data[this.day-1].time=this.currentT;
       this.planData.data[this.day-1].selectValue=this.selectValue;
       this.planData.data[this.day-1].remindValue=this.remindValue;
-      this.$set(this.planData,this.day,{thing:this.thing})
+      this.$set(this.planData,this.day,
+      {thing:this.thing,time:this.currentT,
+      selectValue:this.selectValue,remindValue:this.remindValue});
       var id=this.globalData.openid+this.month;
       const db = wx.cloud.database({env: 'ybb-901hf'})
       db.collection('plan').doc(id).update({
@@ -183,6 +194,7 @@ export default {
       wx.setNavigationBarTitle({title:this.month+'月'+this.day+'日'})
   },
   onLoad(options){
+      Object.assign(this.$data, this.$options.data());//加载页面时，重置数据
       this.currentT=options.year+'-'+options.month+'-'+options.day+' '+'08:00';
       this.year=options.year;
       this.month=options.month;

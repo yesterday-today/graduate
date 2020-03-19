@@ -10,6 +10,7 @@
 import find from '@/components/bus/find'
 import history from '@/components/bus/history'
 import popupForm from '@/components/popupForm'
+import Toast from '../../../static/vant/toast/toast';
 
 export default {
   components:{find,history,popupForm},
